@@ -189,6 +189,7 @@ int main(){
 	write_spi(OSC_ADDR, IODIRB, 0x00);        //		    port_B ==> output
 	
 	
+
 	write_spi(GREEN_ADDR, GPIOA, 0xFF);
 	write_spi(GREEN_ADDR, GPIOB, 0x00);
 	
