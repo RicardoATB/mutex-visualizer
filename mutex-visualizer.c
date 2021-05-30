@@ -2,16 +2,14 @@
 *    for the book Exploring BeagelBone. Based on the spidev_test.c code
 *    example at www.kernel.org  */
 
-#define _XOPEN_SOURCE
 
-#include <stdlib.h>
-
-#include<stdio.h>
-#include<fcntl.h>
-#include<unistd.h>
-#include<sys/ioctl.h>
-#include<stdint.h>
-#include<linux/spi/spidev.h>
+#include <stdlib.h> // used for "system" call
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <stdint.h>
+#include <linux/spi/spidev.h>
 #define SPI_PATH "/dev/spidev1.0"
 
 /* Slave Addresses */
@@ -95,7 +93,7 @@ void write_spi(uint8_t slave_addr, uint8_t reg, uint8_t data) {
 }
 
 /*--------------------------------------------------------------------------------*/
-int config_spi_pins_BBB()
+int config_SPI_pins_BBB()
 {
     int ret;
     status = system("config-pin p9_17 spi_cs; \
@@ -173,24 +171,23 @@ int main(){
    printf("SPI Mode is: %d\n", mode);
 
 
-   	if (config_spi_pins_BBB() != 0) {
+   	if (config_SPI_pins_BBB() != 0) {
         	perror("SPI Error: Can't configure SPI pins");
 		return status;
 	}
 	
 	
-   	write_spi(GREEN_ADDR, IOCON_BANK0, 0x08); // HAEN bit = 1
+   	write_spi(GREEN_ADDR, IOCON_BANK0, 0x08); // set HAEN bit to allow multiple ICs (slave addr)
 
-	/*-------------------------------------------------------*/	
-	write_spi(GREEN_ADDR, IODIRA, 0x00); // port_A => output
-	write_spi(GREEN_ADDR, IODIRB, 0x00); //port_B ==> output
+	write_spi(GREEN_ADDR, IODIRA, 0x00);      // GREEN_LED_DRIVER IC: port_A ==> output
+	write_spi(GREEN_ADDR, IODIRB, 0x00);      //		          port_B ==> output
 	
-	write_spi(RED_ADDR, IODIRA, 0x00); // port_A => output
-	write_spi(RED_ADDR, IODIRB, 0x00); //port_B ==> output
+	write_spi(RED_ADDR, IODIRA, 0x00);        // RED_LED_DRIVER IC: port_A ==> output
+	write_spi(RED_ADDR, IODIRB, 0x00);        //		        port_B ==> output
 	
-	write_spi(OSC_ADDR, IODIRA, 0x00); // port_A => output
-	write_spi(OSC_ADDR, IODIRB, 0x00); //port_B ==> output
-	/*-------------------------------------------------------*/	
+	write_spi(OSC_ADDR, IODIRA, 0x00);        // OSC_DRIVER IC: port_A ==> output
+	write_spi(OSC_ADDR, IODIRB, 0x00);        //		    port_B ==> output
+	
 	
 	write_spi(GREEN_ADDR, GPIOA, 0xFF);
 	write_spi(GREEN_ADDR, GPIOB, 0x00);
@@ -202,8 +199,6 @@ int main(){
 	write_spi(OSC_ADDR, GPIOB, 0x00);
 	
 	close(spi_fd);
-
-
 
 	return 0;
 }
