@@ -51,6 +51,7 @@ void write_spi(uint8_t slave_addr, uint8_t reg, uint8_t data) {
 }
 
 /*--------------------------------------------------------------------------------*/
+// BeagleBone Black pins: P9_17 (~CS), P9_18 (MOSI), P9_22(CLK)
 int config_SPI_pins_BBB()
 {
     int ret;
@@ -118,13 +119,13 @@ int main(){
 	
 	
 	write_spi(GREEN_ADDR, GPIOA, 0xFF);
-	write_spi(GREEN_ADDR, GPIOB, 0x00);
+	write_spi(GREEN_ADDR, GPIOB, 0xFF);
 	
 	write_spi(RED_ADDR, GPIOA, 0xFF);
 	write_spi(RED_ADDR, GPIOB, 0xFF);
 
 	write_spi(OSC_ADDR, GPIOA, 0xFF);
-	write_spi(OSC_ADDR, GPIOB, 0x00);
+	write_spi(OSC_ADDR, GPIOB, 0xFF);
 	
 	close(spi_fd);
 
