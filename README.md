@@ -6,11 +6,11 @@
 
 3 shift-registers being address by SPI protocol using their slave addresses:
 
-<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="90%" height="90%" /><br />
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="90%" height="90%" /><br /><br />
 
 **SPI protocol analyzed by oscilloscope:**
 
-<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="100%" height="100%" /><br />
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="100%" height="100%" /><br /><br />
 
 **PCB already designed**:
 
