@@ -110,6 +110,8 @@ void* change_speed(void* arg) {
 /*------------------------------------------------------------------------------------------------*/
 // https://stackoverflow.com/questions/9547868/is-there-a-way-to-get-user-input-without-pressing-the-enter-key
 void* keyboard_listener(void* arg) {
+
+	int ret_keyboard = 2021;
     struct termios old_tio, new_tio;
     unsigned char c;
 
@@ -124,7 +126,8 @@ void* keyboard_listener(void* arg) {
     
     for (;;) {
         c = getchar();
-        if (c == 'S') {
+        if (c != 'q') {
+        //if (c == 'S') {
             /* The pthread_mutex_trylock() function shall be equivalent to pthread_mutex_lock(), 
              * except that if the mutex object referenced by mutex is currently locked (by any 
              * thread, including the current thread), the call shall return immediately. */
@@ -140,6 +143,7 @@ void* keyboard_listener(void* arg) {
                 pthread_mutex_unlock(&lock);
             }
         }
+		/*
         else if (c == 's') {                                                                             
             if (pthread_mutex_trylock(&lock) != 0) {                                                
                 led_color = "R";                                                                    
@@ -153,52 +157,57 @@ void* keyboard_listener(void* arg) {
                 pthread_mutex_unlock(&lock);                                                        
             }                                                                                       
         }
+		*/
         else {
-            printf("Error: command not recognized\n");
+            //printf("Error: command not recognized\n")
+			printf("\nEXIT\n");
+			pthread_exit(&ret_keyboard);
         }
     }
 }
 /**************************************************************************************************/
 int main() {
 
-   int fd, i;					// file handle and loop counter
-   unsigned char null=0x00;		// sending only a single char
-   //uint8_t mode = 3;			// SPI mode 3
-   uint8_t mode = 0;
+	int fd, i;					// file handle and loop counter
+	int err;
+	unsigned char null=0x00;		// sending only a single char
+	//uint8_t mode = 3;			// SPI mode 3
+	uint8_t mode = 0;
 
-   // The following calls set up the SPI bus properties
-   if ((fd = open(SPI_PATH, O_RDWR))<0){
-      perror("SPI Error: Can't open device.");
+    // The following calls set up the SPI bus properties
+    if ((fd = open(SPI_PATH, O_RDWR))<0){
+		perror("SPI Error: Can't open device.");
       return -1;
-   }
-   if (ioctl(fd, SPI_IOC_WR_MODE, &mode)==-1){
-      perror("SPI: Can't set SPI mode.");
-      return -1;
-   }
-   if (ioctl(fd, SPI_IOC_RD_MODE, &mode)==-1){
-      perror("SPI: Can't get SPI mode.");
-      return -1;
-   }
-   printf("SPI Mode is: %d\n", mode);
+   	}
+   	if (ioctl(fd, SPI_IOC_WR_MODE, &mode)==-1){
+      	perror("SPI: Can't set SPI mode.");
+      	return -1;
+   	}
+   	if (ioctl(fd, SPI_IOC_RD_MODE, &mode)==-1){
+      	perror("SPI: Can't get SPI mode.");
+      	return -1;
+   	}
    
-   // The following calls set up the SPI bus properties
-   if ((spi_fd = open(SPI_PATH, O_RDWR))<0){
-      perror("SPI Error: Can't open device");
-      return -1;
-   }
-   if (ioctl(spi_fd, SPI_IOC_WR_MODE, &mode)==-1){
-      perror("SPI: Can't set SPI mode");
-      return -1;
-   }
-   if (ioctl(spi_fd, SPI_IOC_RD_MODE, &mode)==-1){
-      perror("SPI: Can't get SPI mode");
-      return -1;
-   }
-   printf("SPI Mode is: %d\n", mode);
+	printf("SPI Mode is: %d\n", mode);
+   
+   	// The following calls set up the SPI bus properties
+   	if ((spi_fd = open(SPI_PATH, O_RDWR))<0){
+      	perror("SPI Error: Can't open device");
+      	return -1;
+   	}
+   	if (ioctl(spi_fd, SPI_IOC_WR_MODE, &mode)==-1){
+      	perror("SPI: Can't set SPI mode");
+      	return -1;
+   	}
+   	if (ioctl(spi_fd, SPI_IOC_RD_MODE, &mode)==-1){
+      	perror("SPI: Can't get SPI mode");
+      	return -1;
+   	}
+   	printf("SPI Mode is: %d\n", mode);
 
 
    	if (config_SPI_pins_BBB() != 0) {
-        	perror("SPI Error: Can't configure SPI pins");
+		perror("SPI Error: Can't configure SPI pins");
 		return status;
 	}
 	
@@ -218,8 +227,8 @@ int main() {
 	write_spi(GREEN_ADDR, GPIOA, 0xFF);
 	write_spi(GREEN_ADDR, GPIOB, 0x00);
 	
-	write_spi(RED_ADDR, GPIOA, 0x00);
-	write_spi(RED_ADDR, GPIOB, 0x00);
+	write_spi(RED_ADDR, GPIOA, 0xFF);
+	write_spi(RED_ADDR, GPIOB, 0xFF);
 
 	write_spi(OSC_ADDR, GPIOA, 0xFF);
 	write_spi(OSC_ADDR, GPIOB, 0x00);
@@ -229,12 +238,22 @@ int main() {
     pthread_t speed_thread;
     pthread_t keyboard_listener_thread;
 
-    pthread_create(&speed_thread, NULL, change_speed, NULL);
-    pthread_create(&keyboard_listener_thread, NULL, keyboard_listener, NULL);
+    err = pthread_create(&speed_thread, NULL, change_speed, NULL);
+	if (err !=0)
+		printf("\nCan't create thread 1: [%s]\n", strerror(err));
+	else
+		printf("\nThread 1 created successfully\n");
+
+    err = pthread_create(&keyboard_listener_thread, NULL, keyboard_listener, NULL);
+	if (err !=0)
+		printf("\nCan't create thread 2: [%s]\n", strerror(err));
+	else
+		printf("Thread 2 created successfully\n\n");
 
     // wait for all threads to finish
     pthread_join((pthread_t)speed_thread, NULL);
-    pthread_join((pthread_t)keyboard_listener_thread, NULL);
+    if (pthread_join((pthread_t)keyboard_listener_thread, NULL) == 2021)
+		return 1;
 
     return 1;
 }
