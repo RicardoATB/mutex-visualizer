@@ -19,14 +19,14 @@
 #include <string.h>
 #include <termios.h>
 
-#define SPI_PATH "/dev/spidev1.0"
+#define SPI_PATH "/dev/spidev1.0" // select SPI chip 1 on BeagleBone Black
 
 /* Slave Addresses */
 #define	GREEN_ADDR	0b01000000
 #define RED_ADDR 	0b01000010
 #define OSC_ADDR 	0b01000100
 
-/* Register Addresses */
+/* Register Addresses for MSP23S17 16-bit shift register*/
 #define IODIRA		0x00 // enable I/Os as either inputs or outputs
 #define IODIRB		0x01 // enable I/Os as either inputs or outputs
 #define GPIOA		0x12 // bank A
@@ -49,7 +49,7 @@ int speed = 100;
 pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 void write_spi(uint8_t slave_addr, uint8_t reg, uint8_t data) {
-    	struct spi_ioc_transfer spi;
+	struct spi_ioc_transfer spi;
 	uint8_t spi_buffer[3];
 
 	spi_buffer[0] = slave_addr;
@@ -77,7 +77,7 @@ int config_SPI_pins_BBB()
     return ret;
 }
 
-// Copying char* to another char*
+// Copy char* to another char*
 void str_cpy(char *dst, const char *src) {
    while (*src != '\0') {
       *dst++ = *src++; 
@@ -116,7 +116,7 @@ void* change_speed(void* arg) {
 
 void* keyboard_listener(void* arg) {
 
-	int ret_keyboard = 2021;
+	int ret_keyboard = 1;
     struct termios old_tio, new_tio;
     unsigned char c;
 
@@ -137,13 +137,13 @@ void* keyboard_listener(void* arg) {
              * thread, including the current thread), the call shall return immediately. */
             if (pthread_mutex_trylock(&lock) != 0) {
                 led_color = "R";
-                printf("...I can't change speed! MUTEX BLOCK! speed is %d :(\n", speed);
+                printf("MUTEX BLOCK! speed is %d :(\n", speed);
             }
             else {
                 led_color = "G";
                 speed++;
                 turn_leds_on = 1;
-                printf("...I CAN change speed. MUTEX UNBLOCK! speed is %d :)\n", speed);                              
+                printf("MUTEX UNBLOCK! speed is %d :)\n", speed);                              
                 pthread_mutex_unlock(&lock);
             }
         }
@@ -181,7 +181,6 @@ int main() {
 		return status;
 	}
 	
-	
    	write_spi(GREEN_ADDR, IOCON_BANK0, 0x08); // set HAEN bit to allow multiple ICs (slave addr)
 
 	write_spi(GREEN_ADDR, IODIRA, 0x00);      // GREEN_LED_DRIVER IC:	port_A ==> output
@@ -195,14 +194,14 @@ int main() {
 	
 	
 	// Setting outputs from 3 shift-registers:
-	write_spi(GREEN_ADDR, GPIOA, 0x00);
-	write_spi(GREEN_ADDR, GPIOB, 0x00);
+	write_spi(GREEN_ADDR, GPIOA, 0xFF);
+	write_spi(GREEN_ADDR, GPIOB, 0xFF);
 	
-	write_spi(RED_ADDR, GPIOA, 0x00);
-	write_spi(RED_ADDR, GPIOB, 0x00);
+	write_spi(RED_ADDR, GPIOA, 0xFF);
+	write_spi(RED_ADDR, GPIOB, 0xFF);
 
-	write_spi(OSC_ADDR, GPIOA, 0x00);
-	write_spi(OSC_ADDR, GPIOB, 0x00);
+	write_spi(OSC_ADDR, GPIOA, 0xFF);
+	write_spi(OSC_ADDR, GPIOB, 0xFF);
 	
 	close(spi_fd);
     
