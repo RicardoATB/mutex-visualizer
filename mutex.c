@@ -1,4 +1,7 @@
-// How to compile: $ gcc mutex-prog.c -o mutex -lpthread
+
+// Description: 
+// Author: Ricardo Augusto Teixeira Barbosa
+// Compiling instructions: $ gcc mutex-prog.c -o mutex -lpthread
 
 #include <stdlib.h>
 #include <stdio.h>
