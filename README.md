@@ -4,8 +4,8 @@ Embedded system running real-time software (PREEMPT_RT Linux kernel) to show how
 
 **Addressing 3 shift-registers using SPI protocol**
 
-<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="75%" height="75%" />
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="100%" height="100%" />
 
 **SPI protocol analyzed by oscilloscope:**
 
-<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="85%" height="85%" />
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="100%" height="100%" />
