@@ -11,3 +11,7 @@ Embedded system running real-time software (PREEMPT_RT Linux kernel) to show how
 **SPI protocol analyzed by oscilloscope:**
 
 <img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="100%" height="100%" />
+
+**PCB already designed**:
+
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/HARDWARE/MUTEX-PCB_top.png" width="70%" height="70%" />
