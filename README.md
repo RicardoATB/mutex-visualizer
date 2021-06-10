@@ -4,7 +4,7 @@
 
 **Prototype phase**:
 
-3 shift-registers being address by SPI protocol using their slave addresses:
+3 shift-registers being driven by SPI protocol using their slave addresses:
 
 <img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="90%" height="90%" /><br /><br />
 
