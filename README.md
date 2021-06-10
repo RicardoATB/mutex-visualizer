@@ -4,7 +4,6 @@ Embedded system running real-time software (PREEMPT_RT Linux kernel) to show how
 
 \
 \
-\
 
 **Prototype phase**:
 
@@ -12,7 +11,6 @@ Embedded system running real-time software (PREEMPT_RT Linux kernel) to show how
 
 <img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/prototype.gif" width="90%" height="90%" />
 
-\
 \
 
 **SPI protocol analyzed by oscilloscope:**
