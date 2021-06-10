@@ -14,4 +14,4 @@ Embedded system running real-time software (PREEMPT_RT Linux kernel) to show how
 
 **PCB already designed**:
 
-<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/HARDWARE/MUTEX-PCB_top.png" width="70%" height="70%" />
+<img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/HARDWARE/MUTEX-PCB_top.png" width="80%" height="80%" />
