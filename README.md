@@ -1,5 +1,3 @@
-**[under development)**<br /><br />
-
 **Description**: Embedded system running real-time software (_PREEMPT_RT Linux kernel_) to show how MUTEX and POSIX threads work. Visual output using LEDs (3 x 16-bit shift register IC + SPI protocol) and an oscilloscope (X-Y mode).<br /><br />
 
 **Prototype phase**:
