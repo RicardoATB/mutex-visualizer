@@ -10,6 +10,6 @@
 
 <img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/misc/spi.png" width="100%" height="100%" /><br /><br />
 
-**PCB already designed**:
+**PCB design**:
 
 <img src="https://github.com/RicardoATB/mutex-visualizer/blob/main/HARDWARE/MUTEX-PCB_top.png" width="80%" height="80%" />
